@@ -161,61 +161,6 @@ class _SetupPageState extends State<SetupPage> {
   @override
   Widget build(BuildContext context) {
 
-    /*return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 500),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(height: 30),
-                /*Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Text(widget.title, style: stileTitolo),
-                    Positioned(
-                      left: 0,
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_back, size: 30),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                    ),
-                  ],
-                ),*/
-                Text(widget.title, style: stileTitolo),
-                SizedBox(height: 30),
-
-                selettoreNumeroDomande(),
-                SizedBox(height: 20),
-                selettoreDifficolta(),
-                SizedBox(height: 20),
-                selettoreTipo(),
-                SizedBox(height: 40),
-
-                SizedBox(
-                  width: 220,
-                  child: ElevatedButton(
-                    onPressed: goToQuizPage,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                    ),
-                    child: const Text(
-                      "Start Quiz",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );*/
-
     return Scaffold(
       body: SafeArea(
         child: Stack(
