@@ -47,13 +47,13 @@ class _MyHomePageState extends State<MyHomePage> {
     "images/categories/geography.png"
   ];
 
-  TableRow rigaTabella(List<RawMaterialButton> buttons){
+  TableRow rigaTabella(List<RawMaterialButton> buttons, double height){
     List<SizedBox> children = [];
 
     for(RawMaterialButton button in buttons){
       children.add(
           SizedBox(
-              height: 150,
+              height: height,
               child: button
           )
       );
@@ -71,6 +71,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    const double baseWidth = 412;
+    const double baseHeight = 915;
+
+    final size = MediaQuery.of(context).size;
+    final scaleW = size.width / baseWidth;
+    final scaleH = size.height / baseHeight;
+    final scale = scaleW <= scaleH ? scaleW : scaleH;
+
+    double p(double value) => value * scale;
 
     List<RawMaterialButton> pulsantiCategoria = [];
     for(int i = 0; i < 9; i++){
@@ -85,31 +94,28 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         body: SafeArea(
           child: Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 500),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Text(widget.title, style: stileTitolo),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(p(20)),
+                  child: Text(widget.title, style: stileTitolo),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(p(20)),
+                  child: Table(
+                    border: TableBorder.all(),
+                    children: [
+                      rigaTabella(pulsantiCategoria.sublist(0, 3), p(150)),
+                      rigaTabella(pulsantiCategoria.sublist(3, 6), p(150)),
+                      rigaTabella(pulsantiCategoria.sublist(6, 9), p(150)),
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Table(
-                      border: TableBorder.all(),
-                      children: [
-                        rigaTabella(pulsantiCategoria.sublist(0, 3)),
-                        rigaTabella(pulsantiCategoria.sublist(3, 6)),
-                        rigaTabella(pulsantiCategoria.sublist(6, 9)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        )
+        ),
     );
   }
 }
