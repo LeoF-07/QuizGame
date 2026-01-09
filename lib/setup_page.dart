@@ -45,7 +45,7 @@ class _SetupPageState extends State<SetupPage> {
 
   Future<void> fetchQuestions() async {
     final response = await http.get(
-      Uri.parse('https://opentdb.com/api.php?amount=2'),
+      Uri.parse('https://opentdb.com/api.php?type=boolean&amount=2'),
     );
 
     if (response.statusCode == 200) {
@@ -68,15 +68,16 @@ class _SetupPageState extends State<SetupPage> {
       Navigator.push(
         context,
         MaterialPageRoute<void>(
-          builder: (context) => MutipleChoiceQuestion(
+          builder: (context) => MultipleChoiceQuestion(
             key: UniqueKey(),
-            title: 'Question $questionNumber',
+            title: 'Question ${questionNumber + 1}',
             questionNumber: questionNumber,
             question: questions[questionNumber].question,
             category: questions[questionNumber].category,
             difficulty: questions[questionNumber].difficulty,
             correctAnswer: questions[questionNumber].correctAnswer,
-            incorrectAnswers: questions[questionNumber].incorrectAnswers
+            incorrectAnswers: questions[questionNumber].incorrectAnswers,
+            questions: questions
           ),
         ),
       );
@@ -86,11 +87,14 @@ class _SetupPageState extends State<SetupPage> {
         MaterialPageRoute<void>(
           builder: (context) => BooleanChoiceQuestion(
             key: UniqueKey(),
-            title: 'Question $questionNumber',
+            title: 'Question ${questionNumber + 1}',
             questionNumber: questionNumber,
             question: questions[questionNumber].question,
             category: questions[questionNumber].category,
             difficulty: questions[questionNumber].difficulty,
+            correctAnswer: questions[questionNumber].correctAnswer,
+            incorrectAnswers: questions[questionNumber].incorrectAnswers,
+            questions: questions
           ),
         ),
       );

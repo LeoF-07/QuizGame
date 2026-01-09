@@ -1,34 +1,24 @@
+// Light-green: Color(0xD1CEFFC3)
+// Light-red: Color(0xD1FFC3C3)
+
 import 'package:flutter/material.dart';
 
-class BooleanChoiceQuestion extends StatefulWidget {
-  const BooleanChoiceQuestion({super.key, required this.title, required this.questionNumber, required this.question, required this.category, required this.difficulty});
+import 'package:quiz_game/question_page.dart';
 
-  final String title;
-  final int questionNumber;
-  final String question;
-  final String category;
-  final String difficulty;
+class BooleanChoiceQuestion extends QuestionPage {
+  const BooleanChoiceQuestion({super.key, required super.title, required super.questionNumber, required super.question, required super.category, required super.difficulty, required super.correctAnswer, required super.incorrectAnswers, required super.questions});
 
   @override
   State<BooleanChoiceQuestion> createState() => BooleanChoiceQuestionState();
 }
 
-class BooleanChoiceQuestionState extends State<BooleanChoiceQuestion> {
-  late double scale;
-  double p(double value) => value * scale;
+class BooleanChoiceQuestionState extends QuestionPageState<BooleanChoiceQuestion> {
+  int selectedAnswer = -1;
 
-  late TextStyle stileTitolo;
-  late TextStyle stileTesto;
-
-  BoxDecoration decorazioneContainer() {
-    return BoxDecoration(
-      border: Border.all(color: Colors.black, width: p(2)),
-      borderRadius: BorderRadius.circular(p(12)),
-    );
-  }
-
-  String sistema(String text){
-    return text.replaceAll("&#039;", "'").replaceAll("&quot;", "\"");
+  void selectAnswer(int i){
+    setState(() {
+      selectedAnswer = i;
+    });
   }
 
   @override
@@ -39,7 +29,7 @@ class BooleanChoiceQuestionState extends State<BooleanChoiceQuestion> {
     final size = MediaQuery.of(context).size;
     final scaleW = size.width / baseWidth;
     final scaleH = size.height / baseHeight;
-    scale = scaleW < scaleH ? scaleW : scaleH;
+    super.scale = scaleW < scaleH ? scaleW : scaleH;
 
     stileTitolo = TextStyle(fontSize: p(40));
     stileTesto = TextStyle(fontSize: p(18));
@@ -50,7 +40,9 @@ class BooleanChoiceQuestionState extends State<BooleanChoiceQuestion> {
             child: Column(
               spacing: p(20),
               children: [
+                SizedBox(height: 30),
                 Text(widget.title, style: stileTitolo),
+                SizedBox(height: 20),
                 Container(
                     margin: EdgeInsets.symmetric(horizontal: p(30)),
                     decoration: decorazioneContainer(),
@@ -58,6 +50,56 @@ class BooleanChoiceQuestionState extends State<BooleanChoiceQuestion> {
                       padding: EdgeInsets.all(p(10)),
                       child: Text(sistema(widget.question), style: stileTesto),
                     )
+                ),
+                SizedBox(height: 30),
+                RawMaterialButton(
+                    onPressed: () => selectAnswer(0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black, width: p(2)),
+                        borderRadius: BorderRadius.circular(p(12)),
+                        color: selectedAnswer == 0 ? Color(0xFFFFEB59) : Colors.transparent,
+                      ),
+                      child: Image.asset("images/symbols/true.png", width: p(100))
+                    )
+                ),
+                RawMaterialButton(
+                    onPressed: () => selectAnswer(1),
+                    child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: selectedAnswer == 11 ? Colors.yellow : Colors.black, width: p(2)),
+                          borderRadius: BorderRadius.circular(p(12)),
+                          color: selectedAnswer == 1 ? Color(0xFFFFEB59) : Colors.transparent,
+                        ),
+                        child: Image.asset("images/symbols/false.png", width: p(100))
+                    )
+                ),
+                SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: p(20),
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.arrow_back, size: p(30)),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          padding: EdgeInsets.symmetric(vertical: p(14)),
+                          minimumSize: Size(p(100), p(50))
+                      ),
+                      child: Text(
+                        "Submit",
+                        style: TextStyle(color: Colors.white, fontSize: p(15)),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.arrow_forward, size: p(30)),
+                      onPressed: super.goToTheNextQuestion,
+                    ),
+                  ],
                 )
               ],
             ),
@@ -65,4 +107,5 @@ class BooleanChoiceQuestionState extends State<BooleanChoiceQuestion> {
         )
     );
   }
+
 }

@@ -2,37 +2,46 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-class MutipleChoiceQuestion extends StatefulWidget {
-  const MutipleChoiceQuestion({super.key, required this.title, required this.questionNumber, required this.question, required this.category, required this.difficulty, required this.correctAnswer, required this.incorrectAnswers});
+import 'package:quiz_game/question_page.dart';
 
-  final String title;
-  final int questionNumber;
-  final String question;
-  final String category;
-  final String difficulty;
-  final String correctAnswer;
-  final List<String> incorrectAnswers;
+class MultipleChoiceQuestion extends QuestionPage {
+  const MultipleChoiceQuestion({super.key, required super.title, required super.questionNumber, required super.question, required super.category, required super.difficulty, required super.correctAnswer, required super.incorrectAnswers, required super.questions});
 
   @override
-  State<MutipleChoiceQuestion> createState() => MutipleChoiceQuestionState();
+  State<MultipleChoiceQuestion> createState() => MutipleChoiceQuestionState();
 }
 
-class MutipleChoiceQuestionState extends State<MutipleChoiceQuestion> {
-  late double scale;
-  double p(double value) => value * scale;
+class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestion> {
+  List<String> shuffledAnswers = [];
+  int selectedAnswer = -1;
 
-  late TextStyle stileTitolo;
-  late TextStyle stileTesto;
+  bool initialized = false;
 
-  BoxDecoration decorazioneContainer() {
+  void selectAnswer(int i){
+    setState(() {
+      selectedAnswer = i;
+    });
+  }
+
+  BoxDecoration decorazioneContainerRisposta(int i){
     return BoxDecoration(
       border: Border.all(color: Colors.black, width: p(2)),
       borderRadius: BorderRadius.circular(p(12)),
+      color: selectedAnswer == i ? Colors.yellow : Colors.transparent
     );
   }
 
-  String sistema(String text){
-    return text.replaceAll("&#039;", "'").replaceAll("&quot;", "\"");
+  void initialize(){
+    List<int> indexes = [0, 1, 2, 3];
+    List<String> allAnswers = [widget.correctAnswer, ...widget.incorrectAnswers];
+    shuffledAnswers = [];
+    for(int i = 0; i < 4; i++){
+      int index = Random().nextInt(indexes.length);
+      shuffledAnswers.add(allAnswers[indexes[index]]);
+      indexes.removeAt(index);
+    }
+
+    initialized = true;
   }
 
   @override
@@ -43,31 +52,35 @@ class MutipleChoiceQuestionState extends State<MutipleChoiceQuestion> {
     final size = MediaQuery.of(context).size;
     final scaleW = size.width / baseWidth;
     final scaleH = size.height / baseHeight;
-    scale = scaleW < scaleH ? scaleW : scaleH;
+    super.scale = scaleW < scaleH ? scaleW : scaleH;
 
-    stileTitolo = TextStyle(fontSize: p(40));
-    stileTesto = TextStyle(fontSize: p(18));
+    super.stileTitolo = TextStyle(fontSize: p(40));
+    super.stileTesto = TextStyle(fontSize: p(18));
 
-    List<Container> answers = [];
-    List<int> indexes = [0, 1, 2, 3];
-    widget.incorrectAnswers.add(widget.correctAnswer);
+    if(!initialized) {
+      initialize();
+    }
+
+    List<GestureDetector> answers = [];
+
     for(int i = 0; i < 4; i++){
-      int index = Random().nextInt(indexes.length);
       answers.add(
-        Container(
-          width: double.infinity,
-          margin: EdgeInsets.symmetric(horizontal: p(30)),
-          decoration: decorazioneContainer(),
-          child: Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: EdgeInsets.all(p(10)),
-              child: Text(widget.incorrectAnswers[indexes[index]], style: stileTesto),
-            )
+          GestureDetector(
+            onTap: () => selectAnswer(i),
+            child: Container(
+                width: double.infinity,
+                margin: EdgeInsets.symmetric(horizontal: p(30)),
+                decoration: decorazioneContainerRisposta(i),
+                child: Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: EdgeInsets.all(p(10)),
+                      child: Text(shuffledAnswers[i], style: super.stileTesto),
+                    )
+                )
+            ),
           )
-        )
       );
-      indexes.remove(index);
     }
 
     return Scaffold(
@@ -77,17 +90,17 @@ class MutipleChoiceQuestionState extends State<MutipleChoiceQuestion> {
               spacing: p(20),
               children: [
                 SizedBox(height: 30),
-                Text(widget.title, style: stileTitolo),
+                Text(widget.title, style: super.stileTitolo),
                 SizedBox(height: 20),
                 Container(
                     margin: EdgeInsets.symmetric(horizontal: p(30)),
                     decoration: decorazioneContainer(),
                     child: Padding(
                       padding: EdgeInsets.all(p(10)),
-                      child: Text(sistema(widget.question), style: stileTesto),
+                      child: Text(sistema(widget.question), style: super.stileTesto),
                     )
-                ),
-                SizedBox(height: 30),
+                  ),
+                  SizedBox(height: 30),
                 ...answers,
                 SizedBox(height: 30),
                 Row(
@@ -98,18 +111,6 @@ class MutipleChoiceQuestionState extends State<MutipleChoiceQuestion> {
                       icon: Icon(Icons.arrow_back, size: p(30)),
                       onPressed: () => Navigator.pop(context),
                     ),
-                    /*ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          padding: EdgeInsets.symmetric(vertical: p(14)),
-                          minimumSize: Size(p(100), p(50))
-                      ),
-                      child: Text(
-                        "Submit",
-                        style: TextStyle(color: Colors.white, fontSize: p(15)),
-                      ),
-                    ),*/
                     ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
@@ -122,21 +123,9 @@ class MutipleChoiceQuestionState extends State<MutipleChoiceQuestion> {
                         style: TextStyle(color: Colors.white, fontSize: p(15)),
                       ),
                     ),
-                    /*ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          padding: EdgeInsets.symmetric(vertical: p(14)),
-                          minimumSize: Size(p(100), p(50))
-                      ),
-                      child: Text(
-                        "Submit",
-                        style: TextStyle(color: Colors.white, fontSize: p(15)),
-                      ),
-                    ),*/
                     IconButton(
-                      icon: Icon(Icons.arrow_back, size: p(30)),
-                      onPressed: () => Navigator.pop(context),
+                      icon: Icon(Icons.arrow_forward, size: p(30)),
+                      onPressed: super.goToTheNextQuestion,
                     ),
                   ],
                 )
@@ -144,6 +133,6 @@ class MutipleChoiceQuestionState extends State<MutipleChoiceQuestion> {
             ),
           ),
         )
-    );
-  }
+      );
+    }
 }

@@ -72,6 +72,8 @@ flutter:
     - "images/difficulties/easy.png"
     - "images/difficulties/medium.png"
     - "images/difficulties/hard.png"
+    - "images/symbols/true.png"
+    - "images/symbols/false.png"
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
