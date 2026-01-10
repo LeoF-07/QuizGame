@@ -73,6 +73,8 @@ class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestio
       initialize();
     }
 
+    String category = sistema(widget.questions[widget.questionNumber].category);
+
     List<GestureDetector> answers = [];
 
     for(int i = 0; i < 4; i++){
@@ -87,7 +89,7 @@ class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestio
                     alignment: Alignment.center,
                     child: Padding(
                       padding: EdgeInsets.all(p(10)),
-                      child: Text(shuffledAnswers[i], style: super.stileTesto),
+                      child: Text(sistema(shuffledAnswers[i]), style: super.stileTesto),
                     )
                 )
             ),
@@ -103,7 +105,7 @@ class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestio
                 Positioned(
                   top: p(30),
                   width: p(100),
-                  child: Image.asset(PathDatabases.categoriesPaths[widget.category - 8]),
+                  child: Image.asset(PathDatabases.categoriesPaths[PathDatabases.categoriesCorrispondences[category]!]),
                 ),
                 Positioned(
                   top: p(60),
@@ -146,7 +148,7 @@ class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestio
                   bottom: p(130),
                   right: p(70),
                   child: IconButton(
-                    icon: Icon(Icons.arrow_forward, size: p(30), color: !submitted ? Colors.black : Colors.transparent),
+                    icon: Icon(Icons.arrow_forward, size: p(30), color: submitted ? Colors.black : Colors.transparent),
                     onPressed: submitted ? () => super.goToTheNextQuestion(guessed) : null,
                   ),
                 )

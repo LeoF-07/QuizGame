@@ -32,7 +32,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  TextStyle stileTitolo = TextStyle(fontSize: 40);
+  late TextStyle stileTitolo;
+  late TextStyle stileTesto;
 
   TableRow rigaTabella(List<RawMaterialButton> buttons, double height){
     List<SizedBox> children = [];
@@ -71,6 +72,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
     double p(double value) => value * scale;
 
+    stileTitolo = TextStyle(fontSize: p(40));
+    stileTesto = TextStyle(fontSize: p(22));
+
     List<RawMaterialButton> pulsantiCategoria = [];
     for(int i = 0; i < 25; i++){
       pulsantiCategoria.add(
@@ -80,22 +84,27 @@ class _MyHomePageState extends State<MyHomePage> {
           )
       );
     }
+    pulsantiCategoria.add(RawMaterialButton(onPressed: () {}));
+    pulsantiCategoria.add(RawMaterialButton(onPressed: () {}));
 
     return Scaffold(
         body: SafeArea(
           child: Center(
             child: Column(
+              spacing: p(20),
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: 20),
+                SizedBox(height: 10),
                 Text(widget.title, style: stileTitolo),
+                SizedBox(height: 10),
+                Text("Choose a category", style: stileTesto),
                 Container(
                     margin: EdgeInsets.all(p(20)),
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.black, width: p(2)),
                     ),
                     child: ConstrainedBox(
-                      constraints: BoxConstraints(maxHeight: p(600)),
+                      constraints: BoxConstraints(maxHeight: p(520)),
                       child: SingleChildScrollView(
                         child: Table(
                             border: TableBorder.all(),
@@ -107,7 +116,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               rigaTabella(pulsantiCategoria.sublist(12, 15), p(150)),
                               rigaTabella(pulsantiCategoria.sublist(15, 18), p(150)),
                               rigaTabella(pulsantiCategoria.sublist(18, 21), p(150)),
-                              rigaTabella(pulsantiCategoria.sublist(21, 24), p(150))
+                              rigaTabella(pulsantiCategoria.sublist(21, 24), p(150)),
+                              rigaTabella(pulsantiCategoria.sublist(24, 27), p(150))
                             ],
                           ),
                     )

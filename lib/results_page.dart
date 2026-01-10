@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_game/boolean_choice_question.dart';
 import 'package:quiz_game/main.dart';
+import 'package:quiz_game/path_databases.dart';
 import 'package:quiz_game/question.dart';
 import 'package:quiz_game/question_page.dart';
 
@@ -28,6 +29,10 @@ class ResultsPageState extends State<ResultsPage> {
 
   int punteggio = 0;
 
+  String sistema(String text){
+    return text.replaceAll("&#039;", "'").replaceAll("&quot;", "\"").replaceAll("&amp;", "&");
+  }
+
   @override
   void initState() {
     for(bool correct in widget.corrects){
@@ -54,12 +59,17 @@ class ResultsPageState extends State<ResultsPage> {
     
     List<Row> questions = [];
     for(int i = 0; i < widget.questions.length; i++){
+      String category = sistema(widget.questions[i].category);
+      String difficulty = widget.questions[i].difficulty;
+
       questions.add(
         Row(
           spacing: p(20),
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text("Question ${i + 1}", style: stileVoce),
+            Image.asset(PathDatabases.categoriesPaths[PathDatabases.categoriesCorrispondences[category]!], width: p(40)),
+            Image.asset(PathDatabases.difficultiesPaths[PathDatabases.difficultiesCorrispondences[difficulty]!], width: p(25)),
             Image.asset(widget.corrects[i] ? "images/symbols/true.png" : "images/symbols/false.png", width: p(30)),
           ],
         )
@@ -86,7 +96,7 @@ class ResultsPageState extends State<ResultsPage> {
                     ],
                   ),
                   ConstrainedBox(
-                      constraints: BoxConstraints(maxHeight: p(300)),
+                      constraints: BoxConstraints(maxHeight: p(500)),
                       child: Container(
                         padding: EdgeInsets.all(p(30)),
                         margin: EdgeInsets.symmetric(horizontal: p(30)),

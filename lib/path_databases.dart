@@ -58,7 +58,6 @@ abstract class PathDatabases {
     "images/categories/comics.png",
     "images/categories/gadgets.png",
     "images/categories/animeManga.png",
-    "images/categories/mathematics.png",
     "images/categories/cartoonAnimations.png",
   ];
 
