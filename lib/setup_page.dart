@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:quiz_game/path_databases.dart';
 import 'package:quiz_game/question.dart';
+import 'package:quiz_game/question_page.dart';
 
 import 'boolean_choice_question.dart';
 import 'multiple_choice_question.dart';
@@ -11,7 +14,7 @@ class SetupPage extends StatefulWidget {
   const SetupPage({super.key, required this.title, required this.category});
 
   final String title;
-  final String category;
+  final int category;
 
   @override
   State<SetupPage> createState() => _SetupPageState();
@@ -25,6 +28,7 @@ class _SetupPageState extends State<SetupPage> {
   late TextStyle stileTesto;
 
   int numeroDomande = 10;
+  bool randomNumber = false;
   String difficulty = "";
   String type = "";
 
@@ -44,8 +48,9 @@ class _SetupPageState extends State<SetupPage> {
   }
 
   Future<void> fetchQuestions() async {
+    print('https://opentdb.com/api.php?amount=$numeroDomande${widget.category == 0 ? '' : '&category=${widget.category}'}${difficulty == "" ? '' : '&difficulty=$difficulty'}${type == "all" ? '' : '&type=$type'}');
     final response = await http.get(
-      Uri.parse('https://opentdb.com/api.php?type=boolean&amount=2'),
+      Uri.parse('https://opentdb.com/api.php?amount=$numeroDomande${widget.category == 0 ? '' : '&category=${widget.category}'}${difficulty == "" ? '' : '&difficulty=$difficulty'}${type == "all" ? '' : '&type=$type'}'),
     );
 
     if (response.statusCode == 200) {
@@ -62,22 +67,36 @@ class _SetupPageState extends State<SetupPage> {
   }
 
   void startQuiz() async {
+    if(randomNumber){
+      numeroDomande = 5 + Random().nextInt(16);
+    }
+
     await fetchQuestions();
+
+    List<GlobalKey<QuestionPageState>> questionPageKeys = [];
+    List<bool> corrects = [];
+
+    for(int i = 0; i < questions.length; i++){
+      questionPageKeys.add(GlobalKey<QuestionPageState>());
+      corrects.add(false);
+    }
 
     if(questions[questionNumber].type == "multiple"){
       Navigator.push(
         context,
         MaterialPageRoute<void>(
           builder: (context) => MultipleChoiceQuestion(
-            key: UniqueKey(),
+            key: questionPageKeys[questionNumber],
             title: 'Question ${questionNumber + 1}',
             questionNumber: questionNumber,
             question: questions[questionNumber].question,
-            category: questions[questionNumber].category,
+            category: widget.category,
             difficulty: questions[questionNumber].difficulty,
             correctAnswer: questions[questionNumber].correctAnswer,
             incorrectAnswers: questions[questionNumber].incorrectAnswers,
-            questions: questions
+            questions: questions,
+            corrects: corrects,
+            questionPageKeys: questionPageKeys,
           ),
         ),
       );
@@ -86,15 +105,17 @@ class _SetupPageState extends State<SetupPage> {
         context,
         MaterialPageRoute<void>(
           builder: (context) => BooleanChoiceQuestion(
-            key: UniqueKey(),
+            key: questionPageKeys[questionNumber],
             title: 'Question ${questionNumber + 1}',
             questionNumber: questionNumber,
             question: questions[questionNumber].question,
-            category: questions[questionNumber].category,
+            category: widget.category,
             difficulty: questions[questionNumber].difficulty,
             correctAnswer: questions[questionNumber].correctAnswer,
             incorrectAnswers: questions[questionNumber].incorrectAnswers,
-            questions: questions
+            questions: questions,
+            corrects: corrects,
+            questionPageKeys: questionPageKeys,
           ),
         ),
       );
@@ -113,26 +134,48 @@ class _SetupPageState extends State<SetupPage> {
       padding: EdgeInsets.all(p(16)),
       margin: EdgeInsets.symmetric(horizontal: p(30)),
       decoration: decorazioneSelettori(),
-      child: Column(
+      child: Stack(
         children: [
-          Text("Number of Questions (5 - 20)", style: stileTesto),
-          SizedBox(height: p(10)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Column(
             children: [
-              GestureDetector(
-                onTap: decrementNumberOfQuestions,
-                child: Icon(Icons.arrow_drop_down, size: p(40)),
-              ),
-              Text("$numeroDomande", style: stileTesto),
-              GestureDetector(
-                onTap: incrementNumberOfQuestions,
-                child: Icon(Icons.arrow_drop_up, size: p(40)),
+              Text("Number of Questions (5 - 20)", style: stileTesto),
+              SizedBox(height: p(10)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: randomNumber ? null : decrementNumberOfQuestions,
+                    child: Icon(Icons.arrow_drop_down, size: p(40)),
+                  ),
+                  Text("$numeroDomande", style: stileTesto),
+                  GestureDetector(
+                    onTap: randomNumber ? null : incrementNumberOfQuestions,
+                    child: Icon(Icons.arrow_drop_up, size: p(40)),
+                  ),
+                ],
               ),
             ],
           ),
+          Positioned(
+            bottom: p(0),
+            right: p(0),
+            child: GestureDetector(
+              onTap: () {setState(() {
+                randomNumber = !randomNumber;
+              });},
+              child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: p(16), vertical: p(8)),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: p(2)),
+                    borderRadius: BorderRadius.circular(p(12)),
+                    color: randomNumber ? Colors.green : Colors.transparent
+                  ),
+                  child: Text("Random")
+              )
+            ),
+          )
         ],
-      ),
+      )
     );
   }
 
@@ -143,16 +186,15 @@ class _SetupPageState extends State<SetupPage> {
       decoration: decorazioneSelettori(),
       child: Column(
         children: [
-          Text("Difficulty", style: stileTesto),
+          Text("Difficulty (optional)", style: stileTesto),
           SizedBox(height: p(10)),
           Row(
+            spacing: p(10),
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              pulsanteDifficolta("easy", "images/difficulties/easy.png", p),
-              SizedBox(width: p(10)),
-              pulsanteDifficolta("medium", "images/difficulties/medium.png", p),
-              SizedBox(width: p(10)),
-              pulsanteDifficolta("hard", "images/difficulties/hard.png", p),
+              pulsanteDifficolta("easy", PathDatabases.difficultiesPaths[0]),
+              pulsanteDifficolta("medium", PathDatabases.difficultiesPaths[1]),
+              pulsanteDifficolta("hard", PathDatabases.difficultiesPaths[2]),
             ],
           ),
         ],
@@ -160,9 +202,16 @@ class _SetupPageState extends State<SetupPage> {
     );
   }
 
-  GestureDetector pulsanteDifficolta(String valore, String path, double Function(double) p) {
+  GestureDetector pulsanteDifficolta(String valore, String path) {
     return GestureDetector(
-      onTap: () => setState(() => difficulty = valore),
+      onTap: () => setState(() {
+        if(difficulty == valore){
+          difficulty = "";
+        }
+        else {
+          difficulty = valore;
+        }
+      }),
       child: Container(
         padding: EdgeInsets.all(p(16)),
         decoration: BoxDecoration(
@@ -184,13 +233,11 @@ class _SetupPageState extends State<SetupPage> {
       margin: EdgeInsets.symmetric(horizontal: p(30)),
       decoration: decorazioneSelettori(),
       child: Column(
+        spacing: p(10),
         children: [
           Text("Type", style: stileTesto),
-          SizedBox(height: p(10)),
-          pulsanteTipo("all", "All type"),
-          SizedBox(height: p(10)),
+          pulsanteTipo("all", "Mix"),
           pulsanteTipo("multiple", "Multiple choice"),
-          SizedBox(height: p(10)),
           pulsanteTipo("boolean", "True or False"),
         ],
       ),
@@ -199,7 +246,14 @@ class _SetupPageState extends State<SetupPage> {
 
   GestureDetector pulsanteTipo(String valore, String testo) {
     return GestureDetector(
-      onTap: () => setState(() => type = valore),
+      onTap: () => setState(() {
+        if(type == valore){
+          type = "";
+        }
+        else {
+          type = valore;
+        }
+      }),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: p(16), vertical: p(8)),
         decoration: BoxDecoration(

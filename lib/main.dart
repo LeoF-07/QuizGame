@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_game/path_databases.dart';
 import 'package:quiz_game/setup_page.dart';
 
 void main() {
@@ -33,20 +34,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   TextStyle stileTitolo = TextStyle(fontSize: 40);
 
-  String category = "";
-
-  List<String> paths = [
-    "images/categories/any.png",
-    "images/categories/generalKnowledge.png",
-    "images/categories/books.png",
-    "images/categories/computers.png",
-    "images/categories/film.png",
-    "images/categories/television.png",
-    "images/categories/mathematics.png",
-    "images/categories/scienceNature.png",
-    "images/categories/geography.png"
-  ];
-
   TableRow rigaTabella(List<RawMaterialButton> buttons, double height){
     List<SizedBox> children = [];
 
@@ -62,10 +49,13 @@ class _MyHomePageState extends State<MyHomePage> {
     return TableRow(children: children);
   }
 
-  void goToSetupPage() {
+  void goToSetupPage(int i) {
+    if(i != 0){
+      i += 8;
+    }
     Navigator.push(
         context,
-        MaterialPageRoute<void>(builder: (context) => SetupPage(key: UniqueKey(), title: 'Setup Page', category: category))
+        MaterialPageRoute<void>(builder: (context) => SetupPage(key: UniqueKey(), title: 'Setup Page', category: i))
     );
   }
 
@@ -82,11 +72,11 @@ class _MyHomePageState extends State<MyHomePage> {
     double p(double value) => value * scale;
 
     List<RawMaterialButton> pulsantiCategoria = [];
-    for(int i = 0; i < 9; i++){
+    for(int i = 0; i < 25; i++){
       pulsantiCategoria.add(
           RawMaterialButton(
-            onPressed: goToSetupPage,
-            child: Image.asset(paths[i]),
+            onPressed: () => goToSetupPage(i),
+            child: Image.asset(PathDatabases.categoriesPaths[i]),
           )
       );
     }
@@ -97,20 +87,31 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Padding(
-                  padding: EdgeInsets.all(p(20)),
-                  child: Text(widget.title, style: stileTitolo),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(p(20)),
-                  child: Table(
-                    border: TableBorder.all(),
-                    children: [
-                      rigaTabella(pulsantiCategoria.sublist(0, 3), p(150)),
-                      rigaTabella(pulsantiCategoria.sublist(3, 6), p(150)),
-                      rigaTabella(pulsantiCategoria.sublist(6, 9), p(150)),
-                    ],
-                  ),
+                SizedBox(height: 20),
+                Text(widget.title, style: stileTitolo),
+                Container(
+                    margin: EdgeInsets.all(p(20)),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black, width: p(2)),
+                    ),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxHeight: p(600)),
+                      child: SingleChildScrollView(
+                        child: Table(
+                            border: TableBorder.all(),
+                            children: [
+                              rigaTabella(pulsantiCategoria.sublist(0, 3), p(150)),
+                              rigaTabella(pulsantiCategoria.sublist(3, 6), p(150)),
+                              rigaTabella(pulsantiCategoria.sublist(6, 9), p(150)),
+                              rigaTabella(pulsantiCategoria.sublist(9, 12), p(150)),
+                              rigaTabella(pulsantiCategoria.sublist(12, 15), p(150)),
+                              rigaTabella(pulsantiCategoria.sublist(15, 18), p(150)),
+                              rigaTabella(pulsantiCategoria.sublist(18, 21), p(150)),
+                              rigaTabella(pulsantiCategoria.sublist(21, 24), p(150))
+                            ],
+                          ),
+                    )
+                  )
                 ),
               ],
             ),

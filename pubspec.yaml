@@ -60,15 +60,32 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - images/categories/any.png
-    - images/categories/generalKnowledge.png
-    - images/categories/books.png
-    - "images/categories/computers.png"
+    - "images/categories/any.png"
+    - "images/categories/generalKnowledge.png"
+    - "images/categories/books.png"
     - "images/categories/film.png"
+    - "images/categories/music.png"
+    - "images/categories/musicalsTheatres.png"
     - "images/categories/television.png"
-    - "images/categories/mathematics.png"
+    - "images/categories/videoGames.png"
+    - "images/categories/boardGames.png"
     - "images/categories/scienceNature.png"
+    - "images/categories/computers.png"
+    - "images/categories/mathematics.png"
+    - "images/categories/mythology.png"
+    - "images/categories/sports.png"
     - "images/categories/geography.png"
+    - "images/categories/history.png"
+    - "images/categories/politics.png"
+    - "images/categories/art.png"
+    - "images/categories/celebrities.png"
+    - "images/categories/animals.png"
+    - "images/categories/vehicles.png"
+    - "images/categories/comics.png"
+    - "images/categories/gadgets.png"
+    - "images/categories/animeManga.png"
+    - "images/categories/mathematics.png"
+    - "images/categories/cartoonAnimations.png"
     - "images/difficulties/easy.png"
     - "images/difficulties/medium.png"
     - "images/difficulties/hard.png"

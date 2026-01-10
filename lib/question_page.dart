@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_game/question.dart';
+import 'package:quiz_game/results_page.dart';
 
 import 'boolean_choice_question.dart';
 import 'multiple_choice_question.dart';
 
 abstract class QuestionPage extends StatefulWidget {
-  const QuestionPage({super.key, required this.title, required this.questionNumber, required this.question, required this.category, required this.difficulty, required this.correctAnswer, required this.incorrectAnswers, required this.questions});
+  const QuestionPage({super.key, required this.title, required this.questionNumber, required this.question, required this.category, required this.difficulty, required this.correctAnswer, required this.incorrectAnswers, required this.questions, required this.corrects, required this.questionPageKeys});
 
   final String title;
   final int questionNumber;
   final String question;
-  final String category;
+  final int category;
   final String difficulty;
   final String correctAnswer;
   final List<String> incorrectAnswers;
   final List<Question> questions;
+  final List<bool> corrects;
+  final List<GlobalKey<QuestionPageState>> questionPageKeys;
 }
 
 abstract class QuestionPageState<T extends QuestionPage> extends State<T> {
@@ -23,6 +26,8 @@ abstract class QuestionPageState<T extends QuestionPage> extends State<T> {
 
   late TextStyle stileTitolo;
   late TextStyle stileTesto;
+
+  bool quizEnded = false;
 
   BoxDecoration decorazioneContainer() {
     return BoxDecoration(
@@ -35,41 +40,62 @@ abstract class QuestionPageState<T extends QuestionPage> extends State<T> {
     return text.replaceAll("&#039;", "'").replaceAll("&quot;", "\"").replaceAll("&amp;", "&");
   }
 
-  void goToTheNextQuestion(){
+  void goToTheNextQuestion(bool guessed) async {
     List<Question> questions = widget.questions;
     int questionNumber = widget.questionNumber + 1;
 
-    if(questions[questionNumber].type == "multiple"){
-      Navigator.push(
+    List<bool> newCorrects = widget.corrects;
+    newCorrects[widget.questionNumber] = guessed;
+
+    if(questionNumber == widget.questions.length){
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute<void>(
+          builder: (context) => ResultsPage(
+              key: UniqueKey(),
+              title: 'Results Page',
+              questions: questions,
+              corrects: newCorrects,
+            questionPageKeys: widget.questionPageKeys,
+          ),
+        ),
+      );
+    }
+    else if(questions[questionNumber].type == "multiple"){
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
           builder: (context) => MultipleChoiceQuestion(
-              key: UniqueKey(),
+              key: widget.questionPageKeys[questionNumber],
               title: 'Question ${questionNumber + 1}',
               questionNumber: questionNumber,
               question: questions[questionNumber].question,
-              category: questions[questionNumber].category,
+              category: widget.category,
               difficulty: questions[questionNumber].difficulty,
               correctAnswer: questions[questionNumber].correctAnswer,
               incorrectAnswers: questions[questionNumber].incorrectAnswers,
-              questions: questions
+              questions: questions,
+              corrects: newCorrects,
+              questionPageKeys: widget.questionPageKeys,
           ),
         ),
       );
     } else {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
           builder: (context) => BooleanChoiceQuestion(
-              key: UniqueKey(),
+              key: widget.questionPageKeys[questionNumber],
               title: 'Question ${questionNumber + 1}',
               questionNumber: questionNumber,
               question: questions[questionNumber].question,
-              category: questions[questionNumber].category,
+              category: widget.category,
               difficulty: questions[questionNumber].difficulty,
               correctAnswer: questions[questionNumber].correctAnswer,
               incorrectAnswers: questions[questionNumber].incorrectAnswers,
-              questions: questions
+              questions: questions,
+              corrects: newCorrects,
+              questionPageKeys: widget.questionPageKeys,
           ),
         ),
       );
