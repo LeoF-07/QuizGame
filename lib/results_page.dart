@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_game/boolean_choice_question.dart';
 import 'package:quiz_game/main.dart';
 import 'package:quiz_game/path_databases.dart';
 import 'package:quiz_game/question.dart';
 import 'package:quiz_game/question_page.dart';
-
-import 'multiple_choice_question.dart';
 
 class ResultsPage extends StatefulWidget {
   const ResultsPage({super.key, required this.title, required this.questions, required this.corrects, required this.questionPageKeys});

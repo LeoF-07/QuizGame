@@ -67,6 +67,27 @@ class _SetupPageState extends State<SetupPage> {
   }
 
   void startQuiz() async {
+    if(type == ""){
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Error"),
+            content: Text("Select a Type"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+
+      return;
+    }
+
+
     if(randomNumber){
       numeroDomande = 5 + Random().nextInt(16);
     }
@@ -129,53 +150,114 @@ class _SetupPageState extends State<SetupPage> {
     );
   }
 
+  @override
+  Widget build(BuildContext context) {
+    const double baseWidth = 412;
+    const double baseHeight = 915;
+
+    final size = MediaQuery.of(context).size;
+    final scaleW = size.width / baseWidth;
+    final scaleH = size.height / baseHeight;
+    scale = scaleW < scaleH ? scaleW : scaleH;
+
+    stileTitolo = TextStyle(fontSize: p(40));
+    stileTesto = TextStyle(fontSize: p(22));
+
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          spacing: p(20),
+          children: [
+            SizedBox(height: 20),
+            SizedBox(
+                width: double.infinity,
+                child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Positioned(
+                        left: p(20),
+                        child: IconButton(
+                          icon: Icon(Icons.arrow_back, size: p(30)),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ),
+                      Text(widget.title, style: stileTitolo),
+                    ]
+                )
+            ),
+            SizedBox(height: p(10)),
+
+            selettoreNumeroDomande(),
+            selettoreDifficolta(),
+            selettoreTipo(),
+
+            SizedBox(height: p(10)),
+
+            ElevatedButton(
+              onPressed: startQuiz,
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  padding: EdgeInsets.symmetric(vertical: p(14)),
+                  minimumSize: Size(p(200), p(50))
+              ),
+              child: Text(
+                "Start Quiz",
+                style: TextStyle(color: Colors.white, fontSize: p(15)),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Container selettoreNumeroDomande() {
     return Container(
-      padding: EdgeInsets.all(p(16)),
-      margin: EdgeInsets.symmetric(horizontal: p(30)),
-      decoration: decorazioneSelettori(),
-      child: Stack(
-        children: [
-          Column(
-            children: [
-              Text("Number of Questions (5 - 20)", style: stileTesto),
-              SizedBox(height: p(10)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: randomNumber ? null : decrementNumberOfQuestions,
-                    child: Icon(Icons.arrow_drop_down, size: p(40)),
-                  ),
-                  Text("$numeroDomande", style: stileTesto),
-                  GestureDetector(
-                    onTap: randomNumber ? null : incrementNumberOfQuestions,
-                    child: Icon(Icons.arrow_drop_up, size: p(40)),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Positioned(
-            bottom: p(0),
-            right: p(0),
-            child: GestureDetector(
-              onTap: () {setState(() {
-                randomNumber = !randomNumber;
-              });},
-              child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: p(16), vertical: p(8)),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: p(2)),
-                    borderRadius: BorderRadius.circular(p(12)),
-                    color: randomNumber ? Colors.green : Colors.transparent
-                  ),
-                  child: Text("Random")
-              )
+        padding: EdgeInsets.all(p(16)),
+        margin: EdgeInsets.symmetric(horizontal: p(30)),
+        decoration: decorazioneSelettori(),
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                Text("Number of Questions (5 - 20)", style: stileTesto),
+                SizedBox(height: p(10)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: randomNumber ? null : decrementNumberOfQuestions,
+                      child: Icon(Icons.arrow_drop_down, size: p(40)),
+                    ),
+                    Text("$numeroDomande", style: stileTesto),
+                    GestureDetector(
+                      onTap: randomNumber ? null : incrementNumberOfQuestions,
+                      child: Icon(Icons.arrow_drop_up, size: p(40)),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          )
-        ],
-      )
+            Positioned(
+              bottom: p(0),
+              right: p(0),
+              child: GestureDetector(
+                  onTap: () {setState(() {
+                    randomNumber = !randomNumber;
+                  });},
+                  child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: p(16), vertical: p(8)),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black, width: p(2)),
+                          borderRadius: BorderRadius.circular(p(12)),
+                          color: randomNumber ? Colors.green : Colors.transparent
+                      ),
+                      child: Text("Random")
+                  )
+              ),
+            )
+          ],
+        )
     );
   }
 
@@ -266,63 +348,4 @@ class _SetupPageState extends State<SetupPage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    const double baseWidth = 412;
-    const double baseHeight = 915;
-
-    final size = MediaQuery.of(context).size;
-    final scaleW = size.width / baseWidth;
-    final scaleH = size.height / baseHeight;
-    scale = scaleW < scaleH ? scaleW : scaleH;
-
-    stileTitolo = TextStyle(fontSize: p(40));
-    stileTesto = TextStyle(fontSize: p(22));
-
-    return Scaffold(
-      body: SafeArea(
-          child: Stack(
-            children: [
-              Positioned(
-                left: p(7),
-                top: p(35),
-                child: IconButton(
-                  icon: Icon(Icons.arrow_back, size: p(30)),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ),
-              Center(
-                child: Column(
-                  spacing: p(20),
-                  children: [
-                    SizedBox(height: p(20)),
-                    Text(widget.title, style: stileTitolo),
-                    SizedBox(height: p(10)),
-
-                    selettoreNumeroDomande(),
-                    selettoreDifficolta(),
-                    selettoreTipo(),
-
-                    SizedBox(height: p(10)),
-
-                    ElevatedButton(
-                      onPressed: startQuiz,
-                      style: ElevatedButton.styleFrom(
-                         backgroundColor: Colors.black,
-                         padding: EdgeInsets.symmetric(vertical: p(14)),
-                         minimumSize: Size(p(200), p(50))
-                      ),
-                      child: Text(
-                        "Start Quiz",
-                        style: TextStyle(color: Colors.white, fontSize: p(15)),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          )
-      ),
-    );
-  }
 }

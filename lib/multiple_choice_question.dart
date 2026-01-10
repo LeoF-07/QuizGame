@@ -98,64 +98,87 @@ class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestio
     }
 
     return Scaffold(
-        body: SafeArea(
-          child: Center(
-            child: Stack(
-              children: [
-                Positioned(
-                  top: p(30),
-                  width: p(100),
-                  child: Image.asset(PathDatabases.categoriesPaths[PathDatabases.categoriesCorrispondences[category]!]),
-                ),
-                Positioned(
-                  top: p(60),
-                  right: p(35),
-                  width: p(40),
-                  child: Image.asset(PathDatabases.difficultiesPaths[PathDatabases.difficultiesCorrispondences[widget.questions[widget.questionNumber].difficulty]!]),
-                ),
-                Column(
-                  spacing: p(20),
-                  children: [
-                    SizedBox(height: 30),
-                    Text(widget.title, style: super.stileTitolo),
-                    SizedBox(height: 40),
-                    Container(
-                        margin: EdgeInsets.symmetric(horizontal: p(30)),
-                        decoration: decorazioneContainer(),
-                        child: Padding(
-                          padding: EdgeInsets.all(p(10)),
-                          child: Text(sistema(widget.question), style: super.stileTesto),
+          body: SafeArea(
+              child: Column(
+                spacing: p(20),
+                children: [
+                  SizedBox(height: 20),
+                  SizedBox(
+                      width: double.infinity,
+                      height: p(100),
+                      child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Positioned(
+                              left: p(10),
+                              width: p(80),
+                              child: Image.asset(PathDatabases.categoriesPaths[PathDatabases.categoriesCorrispondences[category]!]),
+                            ),
+                            Text(widget.title, style: super.stileTitolo),
+                            Positioned(
+                              right: p(40),
+                              width: p(40),
+                              child: Image.asset(PathDatabases.difficultiesPaths[PathDatabases.difficultiesCorrispondences[widget.questions[widget.questionNumber].difficulty]!]),
+                            ),
+                          ]
+                      )
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                      margin: EdgeInsets.symmetric(horizontal: p(30)),
+                      decoration: decorazioneContainer(),
+                      child: Padding(
+                        padding: EdgeInsets.all(p(10)),
+                        child: Text(sistema(widget.question), style: super.stileTesto),
+                      )
+                  ),
+                  SizedBox(height: 10),
+                  //...answers,
+                  ConstrainedBox(
+                    constraints: BoxConstraints(minWidth: double.infinity, maxHeight: p(300)),
+                    child: SingleChildScrollView(
+                        child: Column(
+                          spacing: p(20),
+                          children: answers,
                         )
                     ),
-                    SizedBox(height: 30),
-                    ...answers,
-                    SizedBox(height: 30),
-                    ElevatedButton(
-                      onPressed: submit,
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          padding: EdgeInsets.symmetric(vertical: p(14)),
-                          minimumSize: Size(p(100), p(50))
-                      ),
-                      child: Text(
-                        "Submit",
-                        style: TextStyle(color: Colors.white, fontSize: p(15)),
-                      ),
-                    ),
-                  ],
-                ),
-                Positioned(
-                  bottom: p(130),
-                  right: p(70),
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_forward, size: p(30), color: submitted ? Colors.black : Colors.transparent),
-                    onPressed: submitted ? () => super.goToTheNextQuestion(guessed) : null,
                   ),
-                )
-              ],
-            )
-          ),
-        )
+                  SizedBox(height: 30),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: submit,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            padding: EdgeInsets.symmetric(vertical: p(14)),
+                            minimumSize: Size(p(100), p(50)),
+                          ),
+                          child: Text(
+                            "Submit",
+                            style: TextStyle(color: Colors.white, fontSize: p(15)),
+                          ),
+                        ),
+
+                        Positioned(
+                          left: p(285),
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.arrow_forward,
+                              size: p(30),
+                              color: submitted ? Colors.black : Colors.transparent,
+                            ),
+                            onPressed: submitted ? () => super.goToTheNextQuestion(guessed) : null,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+          )
       );
     }
 }

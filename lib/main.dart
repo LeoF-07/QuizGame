@@ -89,21 +89,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
         body: SafeArea(
-          child: Center(
-            child: Column(
-              spacing: p(20),
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(height: 10),
-                Text(widget.title, style: stileTitolo),
-                SizedBox(height: 10),
-                Text("Choose a category", style: stileTesto),
-                Container(
-                    margin: EdgeInsets.all(p(20)),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: p(2)),
-                    ),
-                    child: ConstrainedBox(
+          child: Column(
+            spacing: p(20),
+            children: [
+              SizedBox(height: 10),
+              Text(widget.title, style: stileTitolo),
+              SizedBox(height: 10),
+              Text("Choose a category", style: stileTesto),
+              Container(
+                  margin: EdgeInsets.all(p(20)),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: p(2)),
+                  ),
+                  child: ConstrainedBox(
                       constraints: BoxConstraints(maxHeight: p(520)),
                       child: SingleChildScrollView(
                         child: Table(
@@ -119,14 +117,13 @@ class _MyHomePageState extends State<MyHomePage> {
                               rigaTabella(pulsantiCategoria.sublist(21, 24), p(150)),
                               rigaTabella(pulsantiCategoria.sublist(24, 27), p(150))
                             ],
-                          ),
-                    )
+                        ),
+                      )
                   )
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ),
+        )
     );
   }
 }

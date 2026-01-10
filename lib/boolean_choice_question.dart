@@ -1,6 +1,3 @@
-// Light-green: Color(0xD1CEFFC3)
-// Light-red: Color(0xD1FFC3C3)
-
 import 'package:flutter/material.dart';
 import 'package:quiz_game/path_databases.dart';
 
@@ -48,82 +45,92 @@ class BooleanChoiceQuestionState extends QuestionPageState<BooleanChoiceQuestion
 
     return Scaffold(
         body: SafeArea(
-          child: Center(
-            child: Stack(
-              children: [
-                Positioned(
-                  top: p(30),
-                  width: p(100),
-                  child: Image.asset(PathDatabases.categoriesPaths[PathDatabases.categoriesCorrispondences[widget.questions[widget.questionNumber].category]!]),
-                ),
-                Positioned(
-                  top: p(60),
-                  right: p(35),
-                  width: p(40),
-                  child: Image.asset(PathDatabases.difficultiesPaths[PathDatabases.difficultiesCorrispondences[widget.questions[widget.questionNumber].difficulty]!]),
-                ),
-                Column(
-                  spacing: p(20),
+          child: Column(
+            spacing: p(20),
+            children: [
+              SizedBox(height: 10),
+              SizedBox(
+                  width: double.infinity,
+                  height: p(100),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Positioned(
+                        left: p(10),
+                        width: p(80),
+                        child: Image.asset(PathDatabases.categoriesPaths[PathDatabases.categoriesCorrispondences[widget.questions[widget.questionNumber].category]!]),
+                      ),
+                      Text(widget.title, style: stileTitolo),
+                      Positioned(
+                        right: p(40),
+                        width: p(40),
+                        child: Image.asset(PathDatabases.difficultiesPaths[PathDatabases.difficultiesCorrispondences[widget.questions[widget.questionNumber].difficulty]!]),
+                      ),
+                    ],
+                  )
+              ),
+              SizedBox(height: 20),
+              Container(
+                  margin: EdgeInsets.symmetric(horizontal: p(30)),
+                  decoration: decorazioneContainer(),
+                  child: Padding(
+                    padding: EdgeInsets.all(p(10)),
+                    child: Text(sistema(widget.question), style: stileTesto),
+                  )
+              ),
+              SizedBox(height: 30),
+              RawMaterialButton(
+                  onPressed: () => selectAnswer("True"),
+                  child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black, width: p(2)),
+                          borderRadius: BorderRadius.circular(p(12)),
+                          color: (selectedAnswer == "True" && !submitted) ? Colors.yellow : (selectedAnswer == "True" && submitted && guessed) ? Color(0xD1CEFFC3) : (selectedAnswer == "True" && submitted && !guessed) ? Color(0xD1FFC3C3) : (widget.correctAnswer == "True" && submitted && !guessed) ? Color(0xD1CEFFC3) : Colors.transparent
+                      ),
+                      child: Image.asset("images/symbols/true.png", width: p(100))
+                  )
+              ),
+              RawMaterialButton(
+                  onPressed: () => selectAnswer("False"),
+                  child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black, width: p(2)),
+                          borderRadius: BorderRadius.circular(p(12)),
+                          color: (selectedAnswer == "False" && !submitted) ? Colors.yellow : (selectedAnswer == "False" && submitted && guessed) ? Color(0xD1CEFFC3) : (selectedAnswer == "False" && submitted && !guessed) ? Color(0xD1FFC3C3) : (widget.correctAnswer == "False" && submitted && !guessed) ? Color(0xD1CEFFC3) : Colors.transparent
+                      ),
+                      child: Image.asset("images/symbols/false.png", width: p(100))
+                  )
+              ),
+              SizedBox(height: 30),
+              SizedBox(
+                width: double.infinity,
+                child: Stack(
+                  alignment: Alignment.center,
                   children: [
-                    SizedBox(height: 30),
-                    Text(widget.title, style: stileTitolo),
-                    SizedBox(height: 20),
-                    Container(
-                        margin: EdgeInsets.symmetric(horizontal: p(30)),
-                        decoration: decorazioneContainer(),
-                        child: Padding(
-                          padding: EdgeInsets.all(p(10)),
-                          child: Text(sistema(widget.question), style: stileTesto),
-                        )
-                    ),
-                    SizedBox(height: 30),
-                    RawMaterialButton(
-                        onPressed: () => selectAnswer("True"),
-                        child: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black, width: p(2)),
-                                borderRadius: BorderRadius.circular(p(12)),
-                                color: (selectedAnswer == "True" && !submitted) ? Colors.yellow : (selectedAnswer == "True" && submitted && guessed) ? Color(0xD1CEFFC3) : (selectedAnswer == "True" && submitted && !guessed) ? Color(0xD1FFC3C3) : (widget.correctAnswer == "True" && submitted && !guessed) ? Color(0xD1CEFFC3) : Colors.transparent
-                            ),
-                            child: Image.asset("images/symbols/true.png", width: p(100))
-                        )
-                    ),
-                    RawMaterialButton(
-                        onPressed: () => selectAnswer("False"),
-                        child: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black, width: p(2)),
-                                borderRadius: BorderRadius.circular(p(12)),
-                                color: (selectedAnswer == "False" && !submitted) ? Colors.yellow : (selectedAnswer == "False" && submitted && guessed) ? Color(0xD1CEFFC3) : (selectedAnswer == "False" && submitted && !guessed) ? Color(0xD1FFC3C3) : (widget.correctAnswer == "False" && submitted && !guessed) ? Color(0xD1CEFFC3) : Colors.transparent
-                            ),
-                            child: Image.asset("images/symbols/false.png", width: p(100))
-                        )
-                    ),
-                    SizedBox(height: 30),
                     ElevatedButton(
                       onPressed: submit,
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          padding: EdgeInsets.symmetric(vertical: p(14)),
-                          minimumSize: Size(p(100), p(50))
+                        backgroundColor: Colors.black,
+                        padding: EdgeInsets.symmetric(vertical: p(14)),
+                        minimumSize: Size(p(100), p(50)),
                       ),
                       child: Text(
                         "Submit",
                         style: TextStyle(color: Colors.white, fontSize: p(15)),
                       ),
                     ),
+
+                    Positioned(
+                      left: p(285),
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_forward, size: p(30), color: submitted ? Colors.black : Colors.transparent,),
+                        onPressed: submitted ? () => super.goToTheNextQuestion(guessed) : null,
+                      ),
+                    ),
                   ],
                 ),
-                Positioned(
-                  bottom: p(130),
-                  right: p(70),
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_forward, size: p(30), color: submitted ? Colors.black : Colors.transparent),
-                    onPressed: submitted ? () => super.goToTheNextQuestion(guessed) : null,
-                  ),
-                )
-              ]
-            )
+              )
+            ],
           ),
         )
     );
