@@ -1,3 +1,4 @@
+// Classe astratta con tutti i percorsi / corrispondenze utili
 abstract class PathDatabases {
 
   static const Map<String, int> difficultiesCorrispondences = {

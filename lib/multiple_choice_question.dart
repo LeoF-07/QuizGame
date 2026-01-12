@@ -5,6 +5,7 @@ import 'package:quiz_game/paths_database.dart';
 
 import 'package:quiz_game/question_page.dart';
 
+// Pagina che pone una domanda a risposta multipla, estende la classe astratta Question
 class MultipleChoiceQuestion extends QuestionPage {
   const MultipleChoiceQuestion({super.key, required super.title, required super.questionNumber, required super.question, required super.category, required super.difficulty, required super.correctAnswer, required super.incorrectAnswers, required super.questions, required super.corrects, required super.questionPageKeys});
 
@@ -33,18 +34,6 @@ class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestio
       borderRadius: BorderRadius.circular(p(12)),
       color: (selectedAnswer == i && !submitted) ? Colors.yellow : (selectedAnswer == i && submitted && guessed) ? Colors.green : (selectedAnswer == i && submitted && !guessed) ? Colors.red : (widget.correctAnswer == shuffledAnswers[i] && submitted && !guessed) ? Colors.green : Colors.transparent
     );
-  }
-
-  void initialize(){
-    List<int> indexes = [0, 1, 2, 3];
-    List<String> allAnswers = [widget.correctAnswer, ...widget.incorrectAnswers];
-    shuffledAnswers = [];
-    for(int i = 0; i < 4; i++){
-      int index = Random().nextInt(indexes.length);
-      shuffledAnswers.add(allAnswers[indexes[index]]);
-      indexes.removeAt(index);
-    }
-    initialized = true;
   }
 
   void submit(){
@@ -77,6 +66,21 @@ class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestio
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    List<int> indexes = [0, 1, 2, 3];
+    List<String> allAnswers = [widget.correctAnswer, ...widget.incorrectAnswers];
+    shuffledAnswers = [];
+    for(int i = 0; i < 4; i++){
+      int index = Random().nextInt(indexes.length);
+      shuffledAnswers.add(allAnswers[indexes[index]]);
+      indexes.removeAt(index);
+    }
+    initialized = true;
+  }
+
+  @override
   Widget build(BuildContext context) {
     const double baseWidth = 412;
     const double baseHeight = 915;
@@ -89,14 +93,9 @@ class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestio
     super.stileTitolo = TextStyle(fontSize: p(40));
     super.stileTesto = TextStyle(fontSize: p(18));
 
-    if(!initialized) {
-      initialize();
-    }
-
     String category = format(widget.questions[widget.questionNumber].category);
 
     List<GestureDetector> answers = [];
-
     for(int i = 0; i < 4; i++){
       answers.add(
           GestureDetector(
@@ -126,6 +125,7 @@ class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestio
                   SizedBox(
                       width: double.infinity,
                       height: p(100),
+                      // Stack che contiene al centro il titolo della domanda mentre a sinistra e a destra con posizioni assolute l'immagine della categoria e della difficoltà
                       child: Stack(
                           alignment: Alignment.center,
                           children: [
@@ -144,6 +144,8 @@ class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestio
                       )
                   ),
                   SizedBox(height: 20),
+
+                  // Contenitore della domanda
                   Container(
                       margin: EdgeInsets.symmetric(horizontal: p(30)),
                       decoration: decorazioneContainer(),
@@ -153,6 +155,9 @@ class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestio
                       )
                   ),
                   SizedBox(height: 10),
+
+                  // ConstrainedBox per imporre una larghezza minima e un'altezza massima ai GestureDetectors delle risposte
+                  // in modo da gestire eventuali overflow con lo scroll
                   ConstrainedBox(
                     constraints: BoxConstraints(minWidth: double.infinity, maxHeight: p(300)),
                     child: SingleChildScrollView(
@@ -165,22 +170,11 @@ class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestio
                   SizedBox(height: 30),
                   SizedBox(
                     width: double.infinity,
+
+                    // Stack con il pulsante submit al centro e a sinistra e a destra con posizioni assolute il pulsante per tornare alla Home e la freccia alla domanda successiva
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        ElevatedButton(
-                          onPressed: submitted ? null : submit,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            padding: EdgeInsets.symmetric(vertical: p(14)),
-                            minimumSize: Size(p(100), p(50)),
-                          ),
-                          child: Text(
-                            "Submit",
-                            style: TextStyle(color: Colors.white, fontSize: p(15)),
-                          ),
-                        ),
-
                         Positioned(
                           left: p(30),
                           child: ElevatedButton(
@@ -196,6 +190,20 @@ class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestio
                             ),
                           ),
                         ),
+
+                        ElevatedButton(
+                          onPressed: submitted ? null : submit,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            padding: EdgeInsets.symmetric(vertical: p(14)),
+                            minimumSize: Size(p(100), p(50)),
+                          ),
+                          child: Text(
+                            "Submit",
+                            style: TextStyle(color: Colors.white, fontSize: p(15)),
+                          ),
+                        ),
+
                         Positioned(
                           left: p(285),
                           child: IconButton(

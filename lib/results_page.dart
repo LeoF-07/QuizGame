@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:quiz_game/main.dart';
 import 'package:quiz_game/paths_database.dart';
 import 'package:quiz_game/question.dart';
 import 'package:quiz_game/question_page.dart';
 
+// Pagina dei risultati a cui si viene reindirizzati alla fine del quiz
 class ResultsPage extends StatefulWidget {
   const ResultsPage({super.key, required this.title, required this.questions, required this.corrects, required this.questionPageKeys});
 
@@ -26,8 +28,8 @@ class ResultsPageState extends State<ResultsPage> {
 
   int punteggio = 0;
 
-  String sistema(String text){
-    return text.replaceAll("&#039;", "'").replaceAll("&quot;", "\"").replaceAll("&amp;", "&");
+  String format(String text){
+    return HtmlUnescape().convert(text);
   }
 
   @override
@@ -56,9 +58,12 @@ class ResultsPageState extends State<ResultsPage> {
     
     List<Row> questions = [];
     for(int i = 0; i < widget.questions.length; i++){
-      String category = sistema(widget.questions[i].category);
+      String category = format(widget.questions[i].category);
       String difficulty = widget.questions[i].difficulty;
 
+      // Lista di questions
+      // Ogni question è una riga che contiene il numero della domanda, l'immagine della categoria,
+      // l'immagine della diffcoltà e l'indicatore se è stata indovinata o no
       questions.add(
         Row(
           spacing: p(20),
@@ -76,12 +81,14 @@ class ResultsPageState extends State<ResultsPage> {
     return Scaffold(
       body: SafeArea(
         child: Center(
+          // Stack che contiene la colonna principale e il pulsante di ritorno alla HomePage in posizione assoluta rispetto alla pagina
           child: Stack(
             alignment: Alignment.center,
             children:[
               Column(
                 spacing: p(20),
                 children: [
+                  // Titolo
                   Padding(
                     padding: EdgeInsets.all(p(20)),
                     child: Text(widget.title, style: stileTitolo),
@@ -92,6 +99,8 @@ class ResultsPageState extends State<ResultsPage> {
                       Text("$punteggio/${widget.questions.length}", style: stileTesto),
                     ],
                   ),
+
+                  // ConstrainedBox che impone una altezza massima alla colonna dei risultati che viene poi gestita con lo scroll
                   ConstrainedBox(
                       constraints: BoxConstraints(maxHeight: p(500)),
                       child: Container(

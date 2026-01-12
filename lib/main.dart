@@ -22,6 +22,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
+// Pagina principale in cui si sceglie la categoria
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -76,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
     stileTesto = TextStyle(fontSize: p(22));
 
     List<RawMaterialButton> pulsantiCategoria = [];
-    for(int i = 0; i < 25; i++){
+    for(int i = 0; i < PathDatabases.categoriesPaths.length; i++){
       pulsantiCategoria.add(
           RawMaterialButton(
             onPressed: () => goToSetupPage(i),
@@ -92,18 +94,24 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             spacing: p(20),
             children: [
+              // Titolo
               SizedBox(height: 10),
               Text(widget.title, style: stileTitolo),
               SizedBox(height: 10),
+
               Text("Choose a category", style: stileTesto),
+
+              // Contenitore della tabella
               Container(
                   margin: EdgeInsets.all(p(20)),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black, width: p(2)),
                   ),
+                  // ConstrainedBox per dare un'altezza massima alla tabella e adottare lo scroll
                   child: ConstrainedBox(
                       constraints: BoxConstraints(maxHeight: p(520)),
                       child: SingleChildScrollView(
+                        // Tabella
                         child: Table(
                             border: TableBorder.all(),
                             children: [

@@ -3,6 +3,7 @@ import 'package:quiz_game/paths_database.dart';
 
 import 'package:quiz_game/question_page.dart';
 
+// Pagina che pone una domanda con risposta T/F, estende la classe astratta Question
 class BooleanChoiceQuestion extends QuestionPage {
   const BooleanChoiceQuestion({super.key, required super.title, required super.questionNumber, required super.question, required super.category, required super.difficulty, required super.correctAnswer, required super.incorrectAnswers, required super.questions, required super.corrects, required super.questionPageKeys});
 
@@ -74,6 +75,7 @@ class BooleanChoiceQuestionState extends QuestionPageState<BooleanChoiceQuestion
               SizedBox(
                   width: double.infinity,
                   height: p(100),
+                  // Stack che contiene al centro il titolo della domanda mentre a sinistra e a destra con posizioni assolute l'immagine della categoria e della difficoltà
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
@@ -92,6 +94,8 @@ class BooleanChoiceQuestionState extends QuestionPageState<BooleanChoiceQuestion
                   )
               ),
               SizedBox(height: 20),
+
+              // Contenitore della domanda
               Container(
                   margin: EdgeInsets.symmetric(horizontal: p(30)),
                   decoration: decorazioneContainer(),
@@ -101,6 +105,8 @@ class BooleanChoiceQuestionState extends QuestionPageState<BooleanChoiceQuestion
                   )
               ),
               SizedBox(height: 30),
+
+              // Pulsanti Vero e Falso
               RawMaterialButton(
                   onPressed: submitted ? null : () => selectAnswer("True"),
                   child: Container(
@@ -126,6 +132,7 @@ class BooleanChoiceQuestionState extends QuestionPageState<BooleanChoiceQuestion
               SizedBox(height: 30),
               SizedBox(
                 width: double.infinity,
+                // Stack con il pulsante submit al centro e a sinistra e a destra con posizioni assolute il pulsante per tornare alla Home e la freccia alla domanda successiva
                 child: Stack(
                   alignment: Alignment.center,
                   children: [

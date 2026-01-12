@@ -7,6 +7,7 @@ import 'boolean_choice_question.dart';
 import 'main.dart';
 import 'multiple_choice_question.dart';
 
+// Classe astratta QuestionPage che viene estesa da MultipleChoiceQuestion e BooleanQuestion e implementa alcuni metodi comuni
 abstract class QuestionPage extends StatefulWidget {
   const QuestionPage({super.key, required this.title, required this.questionNumber, required this.question, required this.category, required this.difficulty, required this.correctAnswer, required this.incorrectAnswers, required this.questions, required this.corrects, required this.questionPageKeys});
 

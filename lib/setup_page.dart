@@ -10,6 +10,7 @@ import 'package:quiz_game/question_page.dart';
 import 'boolean_choice_question.dart';
 import 'multiple_choice_question.dart';
 
+// Pagina di setup in cui si impostano le preferenze del quiz e lo si avvia
 class SetupPage extends StatefulWidget {
   const SetupPage({super.key, required this.title, required this.category});
 
@@ -179,6 +180,7 @@ class _SetupPageState extends State<SetupPage> {
                 child: Stack(
                     alignment: Alignment.center,
                     children: [
+                      // IconButton per tornare alla pagina principale con posizione assoluta
                       Positioned(
                         left: p(20),
                         child: IconButton(
@@ -186,18 +188,22 @@ class _SetupPageState extends State<SetupPage> {
                           onPressed: () => Navigator.pop(context),
                         ),
                       ),
+                      // Titolo
                       Text(widget.title, style: stileTitolo),
                     ]
                 )
             ),
             SizedBox(height: p(10)),
 
+
+            // Selettori
             selettoreNumeroDomande(),
             selettoreDifficolta(),
             selettoreTipo(),
 
             SizedBox(height: p(10)),
 
+            // Pulsante di avvio del quiz
             ElevatedButton(
               onPressed: startQuiz,
               style: ElevatedButton.styleFrom(
@@ -223,6 +229,8 @@ class _SetupPageState extends State<SetupPage> {
         decoration: decorazioneSelettori(),
         child: Stack(
           children: [
+            // Colonna con il testo del selettore e la riga con le icone per la selezione del numero di domande
+            // Le icone sono racchiuse in un GestureDetector e non in un IconButton solamente perché gli IconButton hanno un padding/margine strano
             Column(
               children: [
                 Text("Number of Questions (5 - 20)", style: stileTesto),
@@ -243,6 +251,8 @@ class _SetupPageState extends State<SetupPage> {
                 ),
               ],
             ),
+
+            // Pulsante "Random" in posizione assoluta rispetto al selettore
             Positioned(
               bottom: p(0),
               right: p(0),
@@ -271,6 +281,7 @@ class _SetupPageState extends State<SetupPage> {
       padding: EdgeInsets.all(p(16)),
       margin: EdgeInsets.symmetric(horizontal: p(30)),
       decoration: decorazioneSelettori(),
+      // Colonna con il testo del selettore e una riga con i 3 pulsanti delle difficoltà
       child: Column(
         children: [
           Text("Difficulty (optional)", style: stileTesto),
@@ -319,6 +330,7 @@ class _SetupPageState extends State<SetupPage> {
       width: p(350),
       margin: EdgeInsets.symmetric(horizontal: p(30)),
       decoration: decorazioneSelettori(),
+      // Colonna con il testo del selettore e i 3 pulsanti del tipo
       child: Column(
         spacing: p(10),
         children: [
