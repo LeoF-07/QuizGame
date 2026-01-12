@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:quiz_game/path_databases.dart';
+import 'package:quiz_game/paths_database.dart';
 import 'package:quiz_game/question.dart';
 import 'package:quiz_game/question_page.dart';
 
@@ -27,7 +27,7 @@ class _SetupPageState extends State<SetupPage> {
   late TextStyle stileTitolo;
   late TextStyle stileTesto;
 
-  int numeroDomande = 10;
+  int questionsNumber = 10;
   bool randomNumber = false;
   String difficulty = "";
   String type = "";
@@ -35,22 +35,23 @@ class _SetupPageState extends State<SetupPage> {
   List<Question> questions = [];
   int questionNumber = 0;
 
+  String startButtonText = "Start Quiz";
+
   void decrementNumberOfQuestions() {
-    if (numeroDomande > 5) {
-      setState(() => numeroDomande--);
+    if (questionsNumber > 5) {
+      setState(() => questionsNumber--);
     }
   }
 
   void incrementNumberOfQuestions() {
-    if (numeroDomande < 20) {
-      setState(() => numeroDomande++);
+    if (questionsNumber < 20) {
+      setState(() => questionsNumber++);
     }
   }
 
-  Future<void> fetchQuestions() async {
-    print('https://opentdb.com/api.php?amount=$numeroDomande${widget.category == 0 ? '' : '&category=${widget.category}'}${difficulty == "" ? '' : '&difficulty=$difficulty'}${type == "all" ? '' : '&type=$type'}');
+  Future<void> fetchQuestions(int questionsNumber) async {
     final response = await http.get(
-      Uri.parse('https://opentdb.com/api.php?amount=$numeroDomande${widget.category == 0 ? '' : '&category=${widget.category}'}${difficulty == "" ? '' : '&difficulty=$difficulty'}${type == "all" ? '' : '&type=$type'}'),
+      Uri.parse('https://opentdb.com/api.php?amount=$questionsNumber${widget.category == 0 ? '' : '&category=${widget.category}'}${difficulty == "" ? '' : '&difficulty=$difficulty'}${type == "all" ? '' : '&type=$type'}'),
     );
 
     if (response.statusCode == 200) {
@@ -87,12 +88,16 @@ class _SetupPageState extends State<SetupPage> {
       return;
     }
 
+    setState(() {
+      startButtonText = "Loading...";
+    });
 
+    int questionsNumber = this.questionsNumber;
     if(randomNumber){
-      numeroDomande = 5 + Random().nextInt(16);
+      questionsNumber = 5 + Random().nextInt(16);
     }
 
-    await fetchQuestions();
+    await fetchQuestions(questionsNumber);
 
     List<GlobalKey<QuestionPageState>> questionPageKeys = [];
     List<bool> corrects = [];
@@ -201,7 +206,7 @@ class _SetupPageState extends State<SetupPage> {
                   minimumSize: Size(p(200), p(50))
               ),
               child: Text(
-                "Start Quiz",
+                startButtonText,
                 style: TextStyle(color: Colors.white, fontSize: p(15)),
               ),
             ),
@@ -229,7 +234,7 @@ class _SetupPageState extends State<SetupPage> {
                       onTap: randomNumber ? null : decrementNumberOfQuestions,
                       child: Icon(Icons.arrow_drop_down, size: p(40)),
                     ),
-                    Text("$numeroDomande", style: stileTesto),
+                    Text("$questionsNumber", style: stileTesto),
                     GestureDetector(
                       onTap: randomNumber ? null : incrementNumberOfQuestions,
                       child: Icon(Icons.arrow_drop_up, size: p(40)),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_game/path_databases.dart';
+import 'package:quiz_game/paths_database.dart';
 
 import 'package:quiz_game/question_page.dart';
 
@@ -22,6 +22,26 @@ class BooleanChoiceQuestionState extends QuestionPageState<BooleanChoiceQuestion
   }
 
   void submit(){
+    if(selectedAnswer == ""){
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Error"),
+            content: Text("Select an answer"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+
+      return;
+    }
+
     if(selectedAnswer == widget.correctAnswer){
       guessed = true;
     }
@@ -43,6 +63,8 @@ class BooleanChoiceQuestionState extends QuestionPageState<BooleanChoiceQuestion
     stileTitolo = TextStyle(fontSize: p(40));
     stileTesto = TextStyle(fontSize: p(18));
 
+    String category = format(widget.questions[widget.questionNumber].category);
+
     return Scaffold(
         body: SafeArea(
           child: Column(
@@ -58,7 +80,7 @@ class BooleanChoiceQuestionState extends QuestionPageState<BooleanChoiceQuestion
                       Positioned(
                         left: p(10),
                         width: p(80),
-                        child: Image.asset(PathDatabases.categoriesPaths[PathDatabases.categoriesCorrispondences[widget.questions[widget.questionNumber].category]!]),
+                        child: Image.asset(PathDatabases.categoriesPaths[PathDatabases.categoriesCorrispondences[category]!]),
                       ),
                       Text(widget.title, style: stileTitolo),
                       Positioned(
@@ -75,12 +97,12 @@ class BooleanChoiceQuestionState extends QuestionPageState<BooleanChoiceQuestion
                   decoration: decorazioneContainer(),
                   child: Padding(
                     padding: EdgeInsets.all(p(10)),
-                    child: Text(sistema(widget.question), style: stileTesto),
+                    child: Text(format(widget.question), style: stileTesto),
                   )
               ),
               SizedBox(height: 30),
               RawMaterialButton(
-                  onPressed: () => selectAnswer("True"),
+                  onPressed: submitted ? null : () => selectAnswer("True"),
                   child: Container(
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.black, width: p(2)),
@@ -91,7 +113,7 @@ class BooleanChoiceQuestionState extends QuestionPageState<BooleanChoiceQuestion
                   )
               ),
               RawMaterialButton(
-                  onPressed: () => selectAnswer("False"),
+                  onPressed: submitted ? null : () => selectAnswer("False"),
                   child: Container(
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.black, width: p(2)),
@@ -108,7 +130,7 @@ class BooleanChoiceQuestionState extends QuestionPageState<BooleanChoiceQuestion
                   alignment: Alignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: submit,
+                      onPressed: submitted ? null : submit,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         padding: EdgeInsets.symmetric(vertical: p(14)),
@@ -120,6 +142,21 @@ class BooleanChoiceQuestionState extends QuestionPageState<BooleanChoiceQuestion
                       ),
                     ),
 
+                    Positioned(
+                      left: p(30),
+                      child: ElevatedButton(
+                        onPressed: askConfirm,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          padding: EdgeInsets.symmetric(vertical: p(14)),
+                          minimumSize: Size(p(70), p(50)),
+                        ),
+                        child: Text(
+                          "Quit",
+                          style: TextStyle(color: Colors.black, fontSize: p(15)),
+                        ),
+                      ),
+                    ),
                     Positioned(
                       left: p(285),
                       child: IconButton(

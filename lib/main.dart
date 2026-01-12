@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_game/path_databases.dart';
+import 'package:quiz_game/paths_database.dart';
 import 'package:quiz_game/setup_page.dart';
 
 void main() {

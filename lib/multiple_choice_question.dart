@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:quiz_game/path_databases.dart';
+import 'package:quiz_game/paths_database.dart';
 
 import 'package:quiz_game/question_page.dart';
 
@@ -48,6 +48,26 @@ class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestio
   }
 
   void submit(){
+    if(selectedAnswer == -1){
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Error"),
+            content: Text("Select an answer"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+
+      return;
+    }
+
     if(shuffledAnswers[selectedAnswer] == widget.correctAnswer){
       guessed = true;
     }
@@ -73,7 +93,7 @@ class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestio
       initialize();
     }
 
-    String category = sistema(widget.questions[widget.questionNumber].category);
+    String category = format(widget.questions[widget.questionNumber].category);
 
     List<GestureDetector> answers = [];
 
@@ -89,7 +109,7 @@ class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestio
                     alignment: Alignment.center,
                     child: Padding(
                       padding: EdgeInsets.all(p(10)),
-                      child: Text(sistema(shuffledAnswers[i]), style: super.stileTesto),
+                      child: Text(format(shuffledAnswers[i]), style: super.stileTesto),
                     )
                 )
             ),
@@ -129,11 +149,10 @@ class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestio
                       decoration: decorazioneContainer(),
                       child: Padding(
                         padding: EdgeInsets.all(p(10)),
-                        child: Text(sistema(widget.question), style: super.stileTesto),
+                        child: Text(format(widget.question), style: super.stileTesto),
                       )
                   ),
                   SizedBox(height: 10),
-                  //...answers,
                   ConstrainedBox(
                     constraints: BoxConstraints(minWidth: double.infinity, maxHeight: p(300)),
                     child: SingleChildScrollView(
@@ -150,7 +169,7 @@ class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestio
                       alignment: Alignment.center,
                       children: [
                         ElevatedButton(
-                          onPressed: submit,
+                          onPressed: submitted ? null : submit,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.black,
                             padding: EdgeInsets.symmetric(vertical: p(14)),
@@ -163,13 +182,24 @@ class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestio
                         ),
 
                         Positioned(
+                          left: p(30),
+                          child: ElevatedButton(
+                            onPressed: askConfirm,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              padding: EdgeInsets.symmetric(vertical: p(14)),
+                              minimumSize: Size(p(70), p(50)),
+                            ),
+                            child: Text(
+                              "Quit",
+                              style: TextStyle(color: Colors.black, fontSize: p(15)),
+                            ),
+                          ),
+                        ),
+                        Positioned(
                           left: p(285),
                           child: IconButton(
-                            icon: Icon(
-                              Icons.arrow_forward,
-                              size: p(30),
-                              color: submitted ? Colors.black : Colors.transparent,
-                            ),
+                            icon: Icon(Icons.arrow_forward, size: p(30), color: submitted ? Colors.black : Colors.transparent,),
                             onPressed: submitted ? () => super.goToTheNextQuestion(guessed) : null,
                           ),
                         ),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:quiz_game/question.dart';
 import 'package:quiz_game/results_page.dart';
 
 import 'boolean_choice_question.dart';
+import 'main.dart';
 import 'multiple_choice_question.dart';
 
 abstract class QuestionPage extends StatefulWidget {
@@ -36,8 +38,15 @@ abstract class QuestionPageState<T extends QuestionPage> extends State<T> {
     );
   }
 
-  String sistema(String text){
-    return text.replaceAll("&#039;", "'").replaceAll("&quot;", "\"").replaceAll("&amp;", "&");
+  String format(String text){
+    /*return text
+        .replaceAll("&#039;", "'")
+        .replaceAll("&quot;", "\"")
+        .replaceAll("&amp;", "&")
+        .replaceAll("&eacute;", "é")
+        .replaceAll("&egrave", "è")*/
+
+    return HtmlUnescape().convert(text);
   }
 
   void goToTheNextQuestion(bool guessed) async {
@@ -100,6 +109,38 @@ abstract class QuestionPageState<T extends QuestionPage> extends State<T> {
         ),
       );
     }
+  }
+
+  void askConfirm(){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Quit"),
+          content: Text("Are you sure that you want to quit?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (context) => MyHomePage(
+                      key: UniqueKey(),
+                      title: "Quiz Game",
+                    ),
+                  ),
+                );
+              },
+              child: Text("YES"),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text("NO"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

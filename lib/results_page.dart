@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_game/main.dart';
-import 'package:quiz_game/path_databases.dart';
+import 'package:quiz_game/paths_database.dart';
 import 'package:quiz_game/question.dart';
 import 'package:quiz_game/question_page.dart';
 
@@ -88,7 +88,7 @@ class ResultsPageState extends State<ResultsPage> {
                   ),
                   Column(
                     children: [
-                      Text("Hai totalizzato un punteggio di", style: stileTesto),
+                      Text("You achieved a score of", style: stileTesto),
                       Text("$punteggio/${widget.questions.length}", style: stileTesto),
                     ],
                   ),
