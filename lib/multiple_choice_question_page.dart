@@ -6,14 +6,14 @@ import 'package:quiz_game/paths_database.dart';
 import 'package:quiz_game/question_page.dart';
 
 // Pagina che pone una domanda a risposta multipla, estende la classe astratta Question
-class MultipleChoiceQuestion extends QuestionPage {
-  const MultipleChoiceQuestion({super.key, required super.title, required super.questionNumber, required super.question, required super.category, required super.difficulty, required super.correctAnswer, required super.incorrectAnswers, required super.questions, required super.corrects, required super.questionPageKeys});
+class MultipleChoiceQuestionPage extends QuestionPage {
+  const MultipleChoiceQuestionPage({super.key, required super.title, required super.questionNumber, required super.question, required super.category, required super.difficulty, required super.correctAnswer, required super.incorrectAnswers, required super.questions, required super.corrects, required super.questionPageKeys});
 
   @override
-  State<MultipleChoiceQuestion> createState() => MutipleChoiceQuestionState();
+  State<MultipleChoiceQuestionPage> createState() => MutipleChoiceQuestionState();
 }
 
-class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestion> {
+class MutipleChoiceQuestionState extends QuestionPageState<MultipleChoiceQuestionPage> {
   List<String> shuffledAnswers = [];
   int selectedAnswer = -1;
 

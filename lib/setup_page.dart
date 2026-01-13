@@ -7,8 +7,8 @@ import 'package:quiz_game/paths_database.dart';
 import 'package:quiz_game/question.dart';
 import 'package:quiz_game/question_page.dart';
 
-import 'boolean_choice_question.dart';
-import 'multiple_choice_question.dart';
+import 'boolean_choice_question_page.dart';
+import 'multiple_choice_question_page.dart';
 
 // Pagina di setup in cui si impostano le preferenze del quiz e lo si avvia
 class SetupPage extends StatefulWidget {
@@ -112,7 +112,7 @@ class _SetupPageState extends State<SetupPage> {
       Navigator.push(
         context,
         MaterialPageRoute<void>(
-          builder: (context) => MultipleChoiceQuestion(
+          builder: (context) => MultipleChoiceQuestionPage(
             key: questionPageKeys[questionNumber],
             title: 'Question ${questionNumber + 1}',
             questionNumber: questionNumber,
@@ -131,7 +131,7 @@ class _SetupPageState extends State<SetupPage> {
       Navigator.push(
         context,
         MaterialPageRoute<void>(
-          builder: (context) => BooleanChoiceQuestion(
+          builder: (context) => BooleanChoiceQuestionPage(
             key: questionPageKeys[questionNumber],
             title: 'Question ${questionNumber + 1}',
             questionNumber: questionNumber,

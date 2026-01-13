@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:quiz_game/paths_database.dart';
 import 'package:quiz_game/setup_page.dart';
 
@@ -89,7 +90,14 @@ class _MyHomePageState extends State<MyHomePage> {
     pulsantiCategoria.add(RawMaterialButton(onPressed: () {}));
     pulsantiCategoria.add(RawMaterialButton(onPressed: () {}));
 
-    return Scaffold(
+    // Per tutta l'area dello schermo usa questo stile, che si passa su value. Mettendola sulla HomePage funziona a cascata anche su tutte le altre pagine
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+      ),
+      child: Scaffold(
         body: SafeArea(
           child: Column(
             spacing: p(20),
@@ -113,18 +121,18 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: SingleChildScrollView(
                         // Tabella
                         child: Table(
-                            border: TableBorder.all(),
-                            children: [
-                              rigaTabella(pulsantiCategoria.sublist(0, 3), p(150)),
-                              rigaTabella(pulsantiCategoria.sublist(3, 6), p(150)),
-                              rigaTabella(pulsantiCategoria.sublist(6, 9), p(150)),
-                              rigaTabella(pulsantiCategoria.sublist(9, 12), p(150)),
-                              rigaTabella(pulsantiCategoria.sublist(12, 15), p(150)),
-                              rigaTabella(pulsantiCategoria.sublist(15, 18), p(150)),
-                              rigaTabella(pulsantiCategoria.sublist(18, 21), p(150)),
-                              rigaTabella(pulsantiCategoria.sublist(21, 24), p(150)),
-                              rigaTabella(pulsantiCategoria.sublist(24, 27), p(150))
-                            ],
+                          border: TableBorder.all(),
+                          children: [
+                            rigaTabella(pulsantiCategoria.sublist(0, 3), p(150)),
+                            rigaTabella(pulsantiCategoria.sublist(3, 6), p(150)),
+                            rigaTabella(pulsantiCategoria.sublist(6, 9), p(150)),
+                            rigaTabella(pulsantiCategoria.sublist(9, 12), p(150)),
+                            rigaTabella(pulsantiCategoria.sublist(12, 15), p(150)),
+                            rigaTabella(pulsantiCategoria.sublist(15, 18), p(150)),
+                            rigaTabella(pulsantiCategoria.sublist(18, 21), p(150)),
+                            rigaTabella(pulsantiCategoria.sublist(21, 24), p(150)),
+                            rigaTabella(pulsantiCategoria.sublist(24, 27), p(150))
+                          ],
                         ),
                       )
                   )
@@ -132,6 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         )
+      ),
     );
   }
 }

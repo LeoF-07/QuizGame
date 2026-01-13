@@ -4,14 +4,14 @@ import 'package:quiz_game/paths_database.dart';
 import 'package:quiz_game/question_page.dart';
 
 // Pagina che pone una domanda con risposta T/F, estende la classe astratta Question
-class BooleanChoiceQuestion extends QuestionPage {
-  const BooleanChoiceQuestion({super.key, required super.title, required super.questionNumber, required super.question, required super.category, required super.difficulty, required super.correctAnswer, required super.incorrectAnswers, required super.questions, required super.corrects, required super.questionPageKeys});
+class BooleanChoiceQuestionPage extends QuestionPage {
+  const BooleanChoiceQuestionPage({super.key, required super.title, required super.questionNumber, required super.question, required super.category, required super.difficulty, required super.correctAnswer, required super.incorrectAnswers, required super.questions, required super.corrects, required super.questionPageKeys});
 
   @override
-  State<BooleanChoiceQuestion> createState() => BooleanChoiceQuestionState();
+  State<BooleanChoiceQuestionPage> createState() => BooleanChoiceQuestionState();
 }
 
-class BooleanChoiceQuestionState extends QuestionPageState<BooleanChoiceQuestion> {
+class BooleanChoiceQuestionState extends QuestionPageState<BooleanChoiceQuestionPage> {
   String selectedAnswer = "";
   bool submitted = false;
   bool guessed = false;

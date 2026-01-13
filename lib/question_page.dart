@@ -3,9 +3,9 @@ import 'package:html_unescape/html_unescape.dart';
 import 'package:quiz_game/question.dart';
 import 'package:quiz_game/results_page.dart';
 
-import 'boolean_choice_question.dart';
+import 'boolean_choice_question_page.dart';
 import 'main.dart';
-import 'multiple_choice_question.dart';
+import 'multiple_choice_question_page.dart';
 
 // Classe astratta QuestionPage che viene estesa da MultipleChoiceQuestion e BooleanQuestion e implementa alcuni metodi comuni
 abstract class QuestionPage extends StatefulWidget {
@@ -75,7 +75,7 @@ abstract class QuestionPageState<T extends QuestionPage> extends State<T> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
-          builder: (context) => MultipleChoiceQuestion(
+          builder: (context) => MultipleChoiceQuestionPage(
               key: widget.questionPageKeys[questionNumber],
               title: 'Question ${questionNumber + 1}',
               questionNumber: questionNumber,
@@ -94,7 +94,7 @@ abstract class QuestionPageState<T extends QuestionPage> extends State<T> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
-          builder: (context) => BooleanChoiceQuestion(
+          builder: (context) => BooleanChoiceQuestionPage(
               key: widget.questionPageKeys[questionNumber],
               title: 'Question ${questionNumber + 1}',
               questionNumber: questionNumber,
