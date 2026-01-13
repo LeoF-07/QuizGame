@@ -1,7 +1,6 @@
 # Quiz Game
 
-Quiz Game
-Metti alla prova le tue conoscenze in una serie infinita di quiz che coinvologno le più svariate categorie di domande. Divertiti e impara giocando!
+Quiz Game - Metti alla prova le tue conoscenze in una serie infinita di quiz che coinvologno le più svariate categorie di domande. Divertiti e impara giocando!
 
 ## Screenshots
 <img src="screenshots/examples.png" alt="Screenshots" width="700">
@@ -13,7 +12,7 @@ Dopodiché viene reindirizzato alla SetupPage in cui imposta le sue preferenze s
 * Numero di domande -> da 5 a 20, o Random
 * Difficoltà -> ‘Easy’, ‘Medium o ‘Hard’ (se non viene selezionata le domande saranno miste)
 * Tipo di domande-> ‘Mix’, ‘Multiple choice’ o ‘Boolean’ (T/F)
-Una volta terminato il Setup, le domande vengono richieste al database di OpenTriviaDB (link) e il quiz ha Inizio.
+Una volta terminato il Setup, le domande vengono richieste al database di [OpenTriviaDB](https://opentdb.com/) e il quiz ha Inizio.
 Le domande vengono poste in sequenza e per avanzare alla successiva è necessario prima fare il Submit di quella corrente.
 Alla fine del quiz il giocatore viene portato alla ResultsPage in cui visualizza il punteggio che ha ottenuto e l'elenco delle domande con a fianco il feedback sulla risposta.
 
