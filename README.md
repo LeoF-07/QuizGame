@@ -4,7 +4,7 @@ Quiz Game
 Metti alla prova le tue conoscenze in una serie infinita di quiz che coinvologno le più svariate categorie di domande. Divertiti e impara giocando!
 
 ## Screenshots
-<img src="screenshots/examples.png" alt="Screenshots" width="500">
+<img src="screenshots/examples.png" alt="Screenshots" width="600">
 
 ## Svolgimento del gioco
 
